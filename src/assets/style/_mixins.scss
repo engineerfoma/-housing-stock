@@ -1,0 +1,41 @@
+@import 'vars';
+
+@mixin logo {
+    font-family: $font;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 39px;
+    color: $red;
+}
+
+@mixin user-title {
+    font-family: $font;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19.5px;
+    color: $grey;
+}
+
+@mixin header-aside {
+    font-family: $font;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22.4px;
+    color: $grey;
+}
+
+@mixin main-text {
+    font-family: $font;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: $text;
+}
+
+@mixin title-result {
+    font-family: $font;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 17px;
+    color: $grey;
+}
