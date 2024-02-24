@@ -34,23 +34,28 @@ onMounted(() => {
     if (!user.value) {
         router.push('/')
     }
+})
+
+const user = computed(() => {
+    if (!store.getters['searchUsers/users'].value) {
+        router.push('/')
+        return
+    }
+    const findUser = store.getters['searchUsers/users'].value?.find(i => String(i.id) === route.params.id)
+    if (!findUser) {
+        router.push('/')
+        return
+    }
 
     store.commit({
         type: 'searchUsers/SET_USER_NAME',
-        value: user?.value?.name
+        value: findUser?.name
     })
-    // return store.dispatch('searchUsers/GET_USERS', {
-    //     id: route.params.id
-    // })
+
+    return findUser
 })
-
-// const isLoading = computed(() => {
-//     return store.getters['searchUsers/isLoadingUsers']
-// })
-
-const user = computed(() => store.getters['searchUsers/users'].value?.find(i => String(i.id) === route.params.id))
-
 </script>
+
 <style lang="scss" scoped>
 @import '../assets/style/mixins';
 @import '../assets/style/vars';

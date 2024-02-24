@@ -10,15 +10,8 @@ const router = createRouter({
     ]
 })
 
-router.beforeEach((to, from, next) => {
+router.afterEach((to, from) => {
     const store = useStore()
-    console.log('ghfcjhvkj')
-    console.log(to)
-    
-    store.commit({
-        type: 'searchUsers/SET_USER_NAME',
-        value: store.getters['searchUsers/userName'].value
-    })
     if (to.path === '/') {
 
         store.commit({
@@ -26,7 +19,6 @@ router.beforeEach((to, from, next) => {
             value: 'Пользователь'
         })
     }
-    next()
 })
 
 export default router
