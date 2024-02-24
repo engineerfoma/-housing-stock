@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-const emits = defineEmits(['update:value'])
+const emits = defineEmits(['update:value', 'cutHandler'])
 defineProps({
     value: {
         type: String,
@@ -18,7 +18,7 @@ defineProps({
     }
 })
 
-function inputHandler(event) {
+const inputHandler = (event) => {
     emits('update:value', event.target.value)
 }
 

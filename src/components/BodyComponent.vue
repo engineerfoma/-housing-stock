@@ -1,17 +1,17 @@
 <template>
     <main class="main">
         <SideBarComponent />
-        <ResultComponent />
+        <RouterView />
     </main>
 </template>
 
 <script setup>
 import SideBarComponent from './SideBarComponent.vue'
-import ResultComponent from './ResultComponent.vue'
 </script>
-
 <style lang="scss" scoped>
 @import '../assets/style/vars';
+@import '../assets/style/mixins';
+
 .main {
     display: grid;
     grid-template-columns: 24% 76%;

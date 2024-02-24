@@ -1,33 +1,78 @@
 <template>
     <aside class="side-bar">
         <h2 class="side-bar__title">Поиск сотрудников</h2>
-        <UIInput v-model:value="modelValue" />
+        <UIInput
+            v-model:value="modelValue"
+            @input="debouncedHandleInput"
+        />
         <section class="side-bar__result">
-            <h2 class="side-bar__title">Результаты</h2>
-            <p class="side-bar__description">Начните поиск</p>
-            <ul class="side-bar__resilt_list list">
-                <li class="list__el">
-                    <!-- <img src="" alt=""> -->
-                    <div class="list__el_img">img</div>
-                    <div class="list__el_body">
-                        <h3 class="list__el_body_title">123</h3>
-                        <p class="list__el_body_email">123</p>
-                    </div>
+            <h2
+                class="side-bar__title"
+                :class="{ 'side-bar__title_mb': users?.value?.length }"
+            >Результаты</h2>
+            <p
+                class="side-bar__description"
+                v-if="modelValue.length === 0"
+            >Начните поиск</p>
+            <ul
+                v-if="users?.value?.length"
+                class="side-bar__resilt_list list"
+            >
+                <li
+                    v-for="user in users.value"
+                    :key="user.id"
+                >
+                    <RouterLink class="list__el" :to="'/' + user.id">
+                        <IconBase />
+                        <div class="list__el_body">
+                            <h3 class="list__el_body_title">{{ user.username }}</h3>
+                            <p class="list__el_body_email">{{ user.email }}</p>
+                        </div>
+                    </RouterLink>
                 </li>
             </ul>
-            <UILoader />
+            <UILoader v-else-if="isLoading.value" />
+            <p
+                class="side-bar__description"
+                v-else-if="modelValue.length && !isLoading.value"
+            > {{ error.value }}</p>
+
         </section>
     </aside>
 </template>
 
 <script setup>
+import { useStore } from 'vuex'
+import { computed, ref } from 'vue'
 import UIInput from './UI/UIInput.vue'
 import UILoader from './UI/UILoader.vue'
-import axios from 'axios'
-import { ref } from 'vue'
+import IconBase from './icons/IconBase.vue'
+import debounce from '../utils/debounce'
 
+const store = useStore()
 const modelValue = ref('')
 
+const searchInputModelAsync = (event) => {
+    const target = event.target
+
+    store.dispatch('searchUsers/GET_USERS', {
+        value: target.value
+    })
+}
+
+const debouncedHandleInput = debounce(searchInputModelAsync, 300)
+
+const users = computed(() => {
+    return store.getters['searchUsers/users']
+})
+
+const isLoading = computed(() => {
+    return store.getters['searchUsers/isLoadingUsers']
+})
+
+const error = computed(() => {
+    return store.getters['searchUsers/error']
+})
 </script>
 
 <style lang="scss" scoped>
@@ -44,10 +89,14 @@ const modelValue = ref('')
 
     &__title {
         @include header-aside;
+        margin-bottom: 10px;
+
+        &_mb {
+            margin-bottom: 18px;
+        }
     }
 
     &__description {
-        margin-top: 10px;
         @include main-text;
     }
 
@@ -57,7 +106,6 @@ const modelValue = ref('')
 }
 
 .list {
-    margin-top: 18px;
     display: flex;
     flex-direction: column;
     gap: 18px;
@@ -90,10 +138,11 @@ const modelValue = ref('')
         &_body {
             border-left: 1px solid $border;
             padding: 15px 15px 15px 18px;
-            transition: background-color .3s ease, border-radius .3s ease;
+            transition: background-color .5s ease, border-radius .5s ease;
 
             &_title {
                 @include title-result;
+
             }
 
             &_email {

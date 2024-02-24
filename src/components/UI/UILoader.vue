@@ -1,7 +1,6 @@
 <template>
     <span class="loader"></span>
 </template>
-
 <script setup>
 
 </script>
@@ -10,14 +9,15 @@
 @import '../../assets/style/vars';
 
 .loader {
-    width: 35px;
-    height: 35px;
+    display: flex;
+    margin: 0 auto;
+    width: 25px;
+    height: 25px;
     border: 5px solid $text;
     border-bottom-color: transparent;
     border-radius: 50%;
-    display: inline-block;
     box-sizing: border-box;
-    animation: rotation 1s linear infinite;
+    animation: rotation .9s linear infinite;
 }
 
 @keyframes rotation {
